@@ -96,10 +96,11 @@ def filtering_and_aggregation(spark, df):
     count_df.show()
     
     print("5. Salary statistics:")
+    from pyspark.sql.functions import min, max, avg
     salary_stats = df.agg(
-        {"salary": "min"},
-        {"salary": "max"},
-        {"salary": "avg"}
+        min("salary").alias("min_salary"),
+        max("salary").alias("max_salary"),
+        avg("salary").alias("avg_salary")
     )
     salary_stats.show()
 
