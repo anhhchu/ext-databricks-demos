@@ -2,33 +2,37 @@
 Basic Queries with Databricks Connect
 
 This example demonstrates fundamental DataFrame operations and queries
-using Databricks Connect.
+using Databricks Connect with .databrickscfg profiles.
 """
 
 import os
 import sys
 from pathlib import Path
 
-# Load environment variables from .env file
-try:
-    from dotenv import load_dotenv
-    load_dotenv()
-    print("✓ Loaded environment variables from .env file")
-except ImportError:
-    print("⚠ python-dotenv not available, skipping .env file loading")
-
 # Add project root to path for imports
 project_root = Path(__file__).parent.parent.parent
 sys.path.append(str(project_root))
 
-def get_spark_session():
-    """Create and return a Databricks Spark session."""
+def get_spark_session(profile_name=None):
+    """Create and return a Databricks Spark session using a configuration profile.
+    
+    Args:
+        profile_name (str, optional): Name of the profile in ~/.databrickscfg. 
+                                    If None, uses DEFAULT profile.
+    """
     try:
         from databricks.connect import DatabricksSession
+        from databricks.sdk.core import Config
         
-        # Enable eager evaluation for better interactive experience
-        spark = DatabricksSession.builder.getOrCreate()
-        spark.conf.set('spark.sql.repl.eagerEval.enabled', True)
+        # Configure using profile
+        if profile_name:
+            print(f"✓ Using Databricks profile: {profile_name}")
+            config = Config(profile=profile_name)
+            spark = DatabricksSession.builder.sdkConfig(config).getOrCreate()
+        else:
+            # Use default configuration (DEFAULT profile or environment variables)
+            print("✓ Using default Databricks configuration")
+            spark = DatabricksSession.builder.getOrCreate()
         
         print(f"✓ Connected to Databricks: {spark.client.host}")
         print(f"✓ Spark version: {spark.version}")
@@ -37,6 +41,11 @@ def get_spark_session():
         
     except Exception as e:
         print(f"✗ Failed to create Spark session: {e}")
+        print("\n💡 Troubleshooting tips:")
+        print("1. Run the setup script: python setup/setup_databricks.py")
+        print("2. Check your ~/.databrickscfg file")
+        print("3. For OAuth U2M: Run 'databricks auth login' first")
+        print("4. Ensure your profile has the correct configuration")
         raise
 
 def basic_dataframe_operations(spark):
@@ -181,58 +190,42 @@ def working_with_sample_data(spark):
         
         return mock_df
 
-def performance_tips(spark):
-    """Demonstrate performance optimization tips."""
-    print("\n" + "="*50)
-    print("PERFORMANCE TIPS")
-    print("="*50)
-    
-    # Create larger dataset for demonstration
-    large_data = [(i, f"User_{i}", f"Dept_{i%5}", 50000 + (i * 1000)) 
-                  for i in range(1, 1001)]
-    columns = ["id", "name", "department", "salary"]
-    
-    large_df = spark.createDataFrame(large_data, columns)
-    
-    print("1. Caching for repeated operations:")
-    large_df.cache()
-    
-    # First operation (will cache the data)
-    count1 = large_df.count()
-    print(f"   First count: {count1}")
-    
-    # Second operation (will use cached data)
-    count2 = large_df.filter(large_df.salary > 70000).count()
-    print(f"   High salary count: {count2}")
-    
-    print("2. Using explain() to understand query plans:")
-    large_df.filter(large_df.salary > 70000).explain(True)
-    
-    # Clean up cache
-    large_df.unpersist()
 
 def main():
     """Main function to run all examples."""
     print("Databricks Connect - Basic Queries Example")
     print("=" * 60)
     
+    # Check for profile argument
+    profile_name = None
+    if len(sys.argv) > 1:
+        profile_name = sys.argv[1]
+        print(f"Using specified profile: {profile_name}")
+    else:
+        print("Using default profile (you can specify a profile as: python basic_queries.py PROFILE_NAME)")
+    
     try:
-        # Get Spark session
-        spark = get_spark_session()
+        # Get Spark session with optional profile
+        spark = get_spark_session(profile_name)
         
         # Run examples
         df = basic_dataframe_operations(spark)
         filtering_and_aggregation(spark, df)
         transformed_df = advanced_transformations(spark, df)
         sample_df = working_with_sample_data(spark)
-        performance_tips(spark)
         
         print("\n" + "="*60)
         print("✓ All basic operations completed successfully!")
+        print("📝 Usage examples:")
+        print("   python basic_queries.py          # Use default profile")
+        print("   python basic_queries.py DEV      # Use specific profile")
         print("=" * 60)
         
     except Exception as e:
         print(f"\n✗ Example failed: {e}")
+        print("\n💡 If this is your first time, run the setup script:")
+        print("   cd ../../setup")
+        print("   python setup_databricks.py")
         raise
     finally:
         # Clean up

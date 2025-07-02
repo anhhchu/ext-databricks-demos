@@ -18,11 +18,10 @@ databricks-connect/
 ├── README.md                    # This file
 ├── TESTING.md                   # Complete testing guide
 ├── requirements.txt             # Python dependencies
-├── .env.template               # Environment variables template
 ├── run_tests.sh                 # One-click test runner script
 ├── setup/                      # Setup and configuration scripts
 │   ├── setup_python_venv.py   # Python environment & compatibility checker  
-│   └── setup_databricks.py    # Complete Databricks setup (env + auth + validation)
+│   └── setup_databricks.py    # Databricks profile setup (auth + validation)
 ├── examples/                   # Sample applications
 │   ├── 01_basic_operations/    # Basic Spark operations
 │   ├── 02_etl_pipeline/        # ETL workflow examples
@@ -47,32 +46,15 @@ databricks-connect/
 
 ## Quick Setup
 
-### 1. Configure Environment Variables
-
-Copy `.env.template` to `.env` and configure:
-
-```bash
-cp env.template .env
-# Then edit .env with your values
-```
-
-**Environment Variables**:
-```bash
-DATABRICKS_HOST=https://your-workspace-url.cloud.databricks.com
-DATABRICKS_TOKEN=your-personal-access-token  # Optional if using OAuth
-DATABRICKS_CLUSTER_ID=your-cluster-id        # Optional for serverless
-DATABRICKS_PROFILE=DEFAULT                    # CLI profile name
-SPARK_CONNECT_LOG_LEVEL=INFO                  # Logging level
-```
-
-The setup scripts will automatically detect and use these variables
-
-### 2. Set Up Compatible Python Environment
+### 1. Set Up Compatible Python Environment
 
 ```bash
 # Create virtual environment (recommended)
 python3 -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
+
+# Install dependencies
+pip install -r requirements.txt
 ```
 
 Check Python compatibility and set up virtual environment
@@ -89,43 +71,55 @@ python setup/setup_python_venv.py
   - Guides you through virtual environment setup
   - Provides Python installation instructions if needed
 
-
-### 3. Complete Databricks Setup (One-Stop Setup)
+### 2. Configure Databricks Profile (One-Step Setup)
 
 ```bash
-# Complete setup: environment, authentication, and validation
+# Interactive profile setup with authentication and validation
 python setup/setup_databricks.py
 ```
 
-This consolidated script will:
-- Set up your `.env` file with environment variables
-- Configure Databricks authentication (OAuth or Token)
-- Validate your connection with comprehensive tests
-- Guide you through the entire process interactively
+- **Profile Configuration**: Choose profile name (e.g., DEFAULT, DEV, PROD)
+- **Authentication Setup**: Choose between:
+  - Personal Access Token (PAT) - Simple token-based auth
+  - OAuth M2M - Service principal with client credentials  
+  - OAuth U2M - Interactive browser-based auth
+- **Compute Configuration**: Choose between:
+  - Serverless compute (recommended) - `serverless_compute_id = auto`
+  - Cluster-based compute - Specify your cluster ID
+- **Connection Validation**: Comprehensive testing of your setup
 
-### 4. Run Test Suite (Optional)
+The configuration is stored in `~/.databrickscfg`:
+```ini
+[DEFAULT]
+host = https://your-workspace.cloud.databricks.com
+token = dapi123...  # for PAT authentication
+serverless_compute_id = auto  # for serverless compute
+```
+
+### 3. Run Test Suite (Optional)
 
 ```bash
 # One-click test runner
 ./run_tests.sh
 ```
 
-**That's it!** The new `setup_databricks.py` script handles everything in a single, guided process.
-
 ## Simplified Setup Summary
 
 ```bash
-# 1. Python environment check
+# 1. Python environment and dependencies
 python setup/setup_python_venv.py
-
-# 2. Install dependencies  
 pip install -r requirements.txt
 
-# 3. Complete Databricks setup (one command!)
+# 2. Configure Databricks profile (one command!)
 python setup/setup_databricks.py
 ```
 
-The setup process has been streamlined from 6 steps to just 3 commands!
+**Benefits of Profile-based Configuration:**
+- ✅ More secure (no credentials in project files)
+- ✅ Easier profile switching (DEV/PROD environments)
+- ✅ Follows Databricks best practices
+- ✅ No environment variable conflicts
+- ✅ Works seamlessly with Databricks CLI
 
 📖 **For complete testing instructions, see [TESTING.md](TESTING.md)**
 
@@ -164,9 +158,15 @@ Each example directory contains its own README with specific instructions. Gener
 # Navigate to an example directory
 cd examples/01_basic_operations
 
-# Run the example
+# Run with default profile
 python basic_queries.py
+
+# Run with specific profile
+python basic_queries.py DEV
+python basic_queries.py PROD
 ```
+
+**Profile Usage**: All examples support specifying a profile name as the first argument. This allows you to easily switch between different environments (DEV, STAGING, PROD) or authentication methods.
 
 
 
@@ -231,12 +231,6 @@ print(f"User: {spark.client._user_id}")
 import os
 os.environ['SPARK_CONNECT_LOG_LEVEL'] = 'debug'
 ```
-
-## Additional Resources
-
-- [Databricks Connect Documentation](https://docs.databricks.com/dev-tools/databricks-connect/python/index.html)
-- [Code Examples](https://docs.databricks.com/dev-tools/databricks-connect/python/examples.html)
-- [GitHub Examples Repository](https://github.com/databricks/databricks-connect-examples)
 
 ## Contributing
 
