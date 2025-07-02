@@ -1,0 +1,11 @@
+id,name,department,salary,hire_date,location,age
+1,Alice Johnson,Engineering,85000,2020-01-15,San Francisco,28
+2,Bob Smith,Marketing,65000,2019-03-20,New York,32
+3,Carol Williams,Engineering,95000,2018-07-10,San Francisco,35
+4,David Brown,Sales,70000,2021-02-28,Chicago,29
+5,Eve Davis,Engineering,88000,2020-11-05,San Francisco,26
+6,Frank Miller,Marketing,68000,2019-09-12,New York,31
+7,Grace Wilson,Engineering,92000,2017-12-08,San Francisco,38
+8,Henry Taylor,Sales,72000,2020-08-17,Chicago,27
+9,Ivy Anderson,Marketing,71000,2018-04-22,New York,33
+10,Jack Thomas,Engineering,89000,2021-01-30,San Francisco,25 

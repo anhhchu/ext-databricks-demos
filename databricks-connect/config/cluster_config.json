@@ -1,0 +1,55 @@
+{
+  "cluster_name": "databricks-connect-demo",
+  "spark_version": "16.4.x-scala2.12",
+  "node_type_id": "i3.xlarge",
+  "driver_node_type_id": "i3.xlarge",
+  "num_workers": 2,
+  "autoscale": {
+    "min_workers": 1,
+    "max_workers": 4
+  },
+  "auto_termination_minutes": 60,
+  "enable_elastic_disk": true,
+  "access_mode": "SHARED",
+  "runtime_engine": "STANDARD",
+  "data_security_mode": "SINGLE_USER",
+  "spark_conf": {
+    "spark.sql.adaptive.enabled": "true",
+    "spark.sql.adaptive.coalescePartitions.enabled": "true",
+    "spark.sql.adaptive.skewJoin.enabled": "true",
+    "spark.sql.repl.eagerEval.enabled": "true",
+    "spark.sql.repl.eagerEval.maxNumRows": "20",
+    "spark.sql.repl.eagerEval.truncate": "20"
+  },
+  "custom_tags": {
+    "Purpose": "DatabricksConnect",
+    "Environment": "Demo",
+    "Project": "Learning"
+  },
+  "init_scripts": [],
+  "libraries": [
+    {
+      "pypi": {
+        "package": "plotly>=5.0.0"
+      }
+    },
+    {
+      "pypi": {
+        "package": "scikit-learn>=1.1.0"
+      }
+    },
+    {
+      "pypi": {
+        "package": "pandas>=1.5.0"
+      }
+    }
+  ],
+  "description": "Cluster configuration optimized for Databricks Connect demo examples",
+  "recommended_settings": {
+    "unity_catalog": "Required for Databricks Connect",
+    "shared_access_mode": "Recommended for collaboration",
+    "auto_termination": "Saves costs when not in use",
+    "adaptive_query_execution": "Improves performance",
+    "eager_evaluation": "Better interactive experience"
+  }
+} 

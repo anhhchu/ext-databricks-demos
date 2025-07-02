@@ -1,0 +1,44 @@
+[
+  {
+    "date": "2024-01-01",
+    "location": "San Francisco",
+    "temperature": 15.5,
+    "humidity": 78,
+    "weather_condition": "Cloudy"
+  },
+  {
+    "date": "2024-01-01",
+    "location": "New York",
+    "temperature": -2.1,
+    "humidity": 65,
+    "weather_condition": "Snow"
+  },
+  {
+    "date": "2024-01-01",
+    "location": "Chicago",
+    "temperature": -5.8,
+    "humidity": 72,
+    "weather_condition": "Clear"
+  },
+  {
+    "date": "2024-01-02",
+    "location": "San Francisco",
+    "temperature": 16.2,
+    "humidity": 81,
+    "weather_condition": "Rainy"
+  },
+  {
+    "date": "2024-01-02",
+    "location": "New York",
+    "temperature": -1.5,
+    "humidity": 69,
+    "weather_condition": "Cloudy"
+  },
+  {
+    "date": "2024-01-02",
+    "location": "Chicago",
+    "temperature": -4.2,
+    "humidity": 75,
+    "weather_condition": "Snow"
+  }
+] 

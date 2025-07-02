@@ -1,0 +1,38 @@
+# Core Databricks Connect dependencies
+# Choose version based on your Python version:
+# Python 3.12: databricks-connect==16.4.*
+# Python 3.11: databricks-connect==15.4.*
+# Python 3.10: databricks-connect==14.3.*
+# databricks-connect==15.4.*
+# Note: Databricks CLI should be installed via system package manager (brew, apt, etc.)
+# The modern CLI (v0.200+) is a Go binary, not a Python package
+databricks-sdk[notebook]
+
+# Data manipulation and analysis
+pandas>=1.5.0
+numpy>=1.21.0
+
+# Visualization
+plotly>=5.0.0
+matplotlib>=3.5.0
+seaborn>=0.11.0
+
+# Machine Learning
+scikit-learn>=1.1.0
+mlflow>=2.0.0
+
+# Development and testing
+pytest>=7.0.0
+jupyter>=1.0.0
+notebook>=6.4.0
+
+# Utilities
+python-dotenv>=0.19.0
+requests>=2.28.0
+
+# Optional: For streaming examples
+# kafka-python>=2.0.2
+
+# Optional: For additional data formats
+# pyarrow>=10.0.0
+# delta-spark>=2.0.0 
