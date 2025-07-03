@@ -11,9 +11,7 @@ This is the main directory containing a comprehensive demonstration of Databrick
 
 ### 🔧 **Setup & Configuration**
 - `setup/` - Authentication, environment setup, and connection validation scripts
-- `config/` - Cluster configuration files
 - `requirements.txt` - All Python dependencies
-- `.env.template` - Environment variables template
 
 ### 📚 **Examples** (Progressive Learning Path)
 1. **`01_basic_operations/`** - Fundamental operations
@@ -33,11 +31,6 @@ This is the main directory containing a comprehensive demonstration of Databrick
    - Multiple ML model training (Linear Regression, Random Forest, etc.)
    - MLflow experiment tracking and model registry
    - Batch inference and model deployment
-
-### 🧪 **Testing & Validation**
-- `tests/` - Unit tests for all examples
-- `run_tests.sh` - One-click test runner
-- `TESTING.md` - Complete testing guide
 
 ### 📁 **Sample Data**
 - `data/` - Sample CSV and JSON files for testing examples
