@@ -217,7 +217,7 @@ python basic_queries.py PROD
 4. **PySpark Conflicts**: Uninstall PySpark before installing Databricks Connect
    ```bash
    pip uninstall pyspark
-   pip install "databricks-connect==15.4.*"  # or your compatible version
+   pip install "databricks-connect==*.*.*"  # or your compatible version
    ```
 
 ### Debugging Tips

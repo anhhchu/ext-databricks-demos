@@ -1,104 +1,130 @@
-# Basic Operations with Databricks Connect
+# Basic Operations Examples
 
-This example demonstrates fundamental Databricks Connect operations including:
-
-- Connecting to Databricks using configuration profiles
-- Reading data from various sources
-- Basic DataFrame operations
+This directory contains examples demonstrating fundamental Databricks Connect operations including DataFrame manipulations, queries, and Delta Lake operations.
 
 ## Files
 
-- `basic_queries.py` - Simple data querying and transformations
-- `delta_operations.py` - Delta Lake read/write operations
-- `sql_examples.py` - SQL query examples
-- `data_sources.py` - Reading from multiple data sources
+### `basic_queries.py`
+Comprehensive example showing:
+- DataFrame creation and basic operations
+- Filtering and aggregation
+- Advanced transformations with window functions
+- Working with sample data
 
-## Prerequisites
+### `delta_operations.py` 
+Dedicated script for Delta Lake operations:
+- Reading data from `sample_data.csv` and `weather_data.json`
+- Writing to Delta tables in `main.default` catalog/schema
+- Table verification and analytics queries
+- Delta table details and history
 
-1. **Databricks Connect configured**: Run the setup script to configure your profile:
-   ```bash
-   cd ../../setup
-   python setup_databricks.py
-   ```
+## Data Files Used
 
-2. **Configuration Profile**: Your `~/.databrickscfg` file should contain a profile like:
-   ```ini
-   [DEFAULT]
-   host = https://your-workspace.cloud.databricks.com
-   token = dapi123...  # for PAT authentication
-   serverless_compute_id = auto  # for serverless compute
-   ```
+The examples work with data files located in `../../data/`:
+- `sample_data.csv`: Employee data with columns (id, name, department, salary, hire_date, location, age)
+- `weather_data.json`: Weather data with fields (date, location, temperature, humidity, weather_condition)
 
-3. **Required packages**: Install dependencies:
-   ```bash
-   pip install -r ../../requirements.txt
-   ```
+## Delta Tables Created
 
-## Running the Examples
+Both scripts create the following Delta tables:
+- `main.default.employees` - Employee data from CSV
+- `main.default.weather` - Weather data from JSON
 
-### Using Default Profile
+## Usage
+
+### Running Basic Queries (includes Delta operations)
 ```bash
-# Basic data operations
-python basic_queries.py          # Use default profile
-```
+# Use default profile
+python basic_queries.py
 
-### Using Specific Profile
-```bash
-# Use a specific profile (e.g., DEV, PROD, PERSONAL)
+# Use specific profile
 python basic_queries.py DEV
 ```
 
-## Configuration Options
+### Running Delta Operations Only
+```bash
+# Use default profile
+python delta_operations.py
 
-The examples support different authentication and compute configurations:
+# Use specific profile  
+python delta_operations.py PROD
+```
 
-### Authentication Types
-- **Personal Access Token (PAT)**: Simple token-based authentication
-- **OAuth M2M**: Service principal with client credentials  
-- **OAuth U2M**: Interactive browser-based authentication
+## What the Delta Operations Do
 
-### Compute Types
-- **Serverless**: `serverless_compute_id = auto` (recommended)
-- **Cluster-based**: `cluster_id = your-cluster-id`
+1. **Read CSV Data**: Loads employee data from `sample_data.csv` with proper schema inference
+2. **Read JSON Data**: Loads weather data from `weather_data.json`
+3. **Write to Delta**: Creates Delta tables in the main catalog:
+   - Uses `overwrite` mode to replace existing data
+   - Enables schema evolution with `overwriteSchema` option
+4. **Verify Tables**: Confirms tables were created and checks row counts
+5. **Analytics Queries**: Demonstrates SQL queries on the Delta tables:
+   - Employee analytics by department
+   - Weather analytics by location
+   - Cross-table analysis joining employees and weather data
+6. **Table Details**: Shows Delta table properties and history
 
-## What You'll Learn
+## Prerequisites
 
-1. **Profile Management**: How to configure and use Databricks profiles
-2. **Connection Management**: Establishing secure connections to Databricks
-3. **DataFrame Operations**: Creating, transforming, and analyzing DataFrames
-4. **Delta Lake**: Reading from and writing to Delta Lake tables
-5. **SQL Integration**: Running SQL queries on DataFrames and tables
-6. **Data Sources**: Working with CSV, JSON, and other data formats
-
-## Troubleshooting
-
-If you encounter connection issues:
-
-1. **Check your profile configuration**:
-   ```bash
-   cat ~/.databrickscfg
-   ```
-
-2. **Verify authentication** (for OAuth U2M):
-   ```bash
-   databricks auth login
-   ```
-
-3. **Test the connection**:
+1. **Databricks Connect Setup**: Run the setup script first:
    ```bash
    cd ../../setup
    python setup_databricks.py
    ```
 
-4. **Check workspace permissions**: Ensure your credentials have access to:
-   - Databricks workspace
-   - Compute resources (serverless or cluster)
-   - Required data and catalogs
+2. **Data Files**: Ensure the data files exist:
+   - `../../data/sample_data.csv`
+   - `../../data/weather_data.json`
 
-## Expected Output
+3. **Permissions**: Your Databricks workspace must have:
+   - Access to the `main` catalog
+   - Write permissions to the `default` schema
+   - Delta Lake enabled on the cluster
 
-Each script will display:
-- Profile and connection information
-- Data processing results
-- Performance metrics
-- Sample data previews 
+## Output
+
+The scripts will:
+- Show data previews and schemas
+- Display progress through each step
+- Show analytics results
+- Provide table details and history
+- Give troubleshooting tips if errors occur
+
+## Troubleshooting
+
+Common issues and solutions:
+
+**Connection Issues**:
+- Check your `~/.databrickscfg` file
+- Ensure your cluster is running
+- Verify your profile configuration
+
+**File Not Found**:
+- Ensure data files exist in the `data/` directory
+- Check file paths are correct
+
+**Permission Errors**:
+- Verify access to `main` catalog
+- Check write permissions to `default` schema
+- Ensure Delta Lake is enabled
+
+**Delta Lake Issues**:
+- Confirm Delta Lake libraries are available
+- Check cluster has Delta runtime
+- Verify catalog permissions
+
+## Example Output
+
+When successful, you'll see:
+```
+✅ SUCCESS: All Delta operations completed successfully!
+🎉 Your data is now available in the following Delta tables:
+   📋 Employees: main.default.employees
+   🌤️  Weather: main.default.weather
+```
+
+You can then query these tables from:
+- Databricks SQL
+- Databricks Notebooks
+- Other Databricks Connect applications
+- BI tools connected to Databricks 
